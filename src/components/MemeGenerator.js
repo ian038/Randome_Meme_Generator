@@ -3,8 +3,10 @@ import Placeholder from '../Assets/1doesnotsimply.jpg'
 
 export default function MemeGenerator() {
 
-    const [ topText, setTopText ] = useState('')
-    const [ bottomText, setBottomText ] = useState('')
+    const [ values, setValues ] = useState({
+        topText: '',
+        bottomText: ''
+    })
     const [ randMeme, setRandMeme ] = useState(Placeholder)
     const [ allMemes, setAllMemes ] = useState([])
 
@@ -20,6 +22,11 @@ export default function MemeGenerator() {
         fetchMemes();
     }, []);
 
+    const handleChange = name => e => {
+        const { value } = e.target
+        setValues({ ...values, [name]: value })
+    }
+
     const handleSubmit = e => {
         e.preventDefault()
         // Get random meme from array
@@ -33,14 +40,14 @@ export default function MemeGenerator() {
     return (
         <div>
             <form className='meme-form' onSubmit={handleSubmit}>
-                <input type="text" name="topText" value={topText} placeholder="Enter top text here" onChange={e => setTopText(e.target.value)} />
-                <input type="text" name="topText" value={bottomText} placeholder="Enter bottom text here" onChange={e => setBottomText(e.target.value)} />
+                <input type="text" name="topText" value={values.topText} placeholder="Enter top text here" onChange={handleChange('topText')} />
+                <input type="text" name="topText" value={values.bottomText} placeholder="Enter bottom text here" onChange={handleChange('bottomText')} />
                 <button>Gen</button>
             </form>
             <div className='meme'>
                 <img src={randMeme} alt='' />
-                <h2 className='top'>{topText}</h2>
-                <h2 className='bottom'>{bottomText}</h2>
+                <h2 className='top'>{values.topText}</h2>
+                <h2 className='bottom'>{values.bottomText}</h2>
             </div>
         </div>
     )
